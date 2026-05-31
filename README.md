@@ -209,6 +209,120 @@ Plan: 5 to add, 0 to change, 0 to destroy.
 ```bash
 aws ec2 describe-nat-gateways
 aws ec2 describe-route-tables
+```## Step 7: Create AWS EKS Cluster using Terraform
+
+### Create EKS Configuration
+
+Create a new directory:
+
+```bash
+mkdir terraform-eks
+cd terraform-eks
+nano main.tf
+```
+
+### Initialize Terraform
+
+```bash
+terraform init
+```
+
+### Format Terraform Code
+
+```bash
+terraform fmt
+```
+
+### Validate Terraform Code
+
+```bash
+terraform validate
+```
+
+### Preview Infrastructure Changes
+
+```bash
+terraform plan
+```
+
+Expected Output:
+
+```text
+Plan: 9 to add, 0 to change, 0 to destroy.
+```
+
+### Apply Configuration
+
+```bash
+terraform apply
+```
+
+Type:
+
+```text
+yes
+```
+
+Expected Output:
+
+```text
+Apply complete! Resources added successfully.
+```
+
+### Verify EKS Cluster
+
+```bash
+aws eks list-clusters
+```
+
+Expected Result:
+
+```text
+production-eks-cluster
+```
+
+### Configure kubectl
+
+```bash
+aws eks update-kubeconfig \
+  --region ap-south-1 \
+  --name production-eks-cluster
+```
+
+Expected Result:
+
+```text
+Added new context arn:aws:eks:ap-south-1:ACCOUNT_ID:cluster/production-eks-cluster
+```
+
+### Verify Node Group
+
+```bash
+aws eks describe-nodegroup \
+  --cluster-name production-eks-cluster \
+  --nodegroup-name production-node-group \
+  --region ap-south-1 \
+  --query nodegroup.status
+```
+
+Expected Result:
+
+```text
+ACTIVE
+```
+
+### Verify Worker Nodes
+
+```bash
+kubectl get nodes
+```
+
+Expected Result:
+
+```text
+NAME                                        STATUS   ROLES   AGE
+ip-10-0-3-xxx.ap-south-1.compute.internal   Ready    <none>
+ip-10-0-4-xxx.ap-south-1.compute.internal   Ready    <none>
 ```
 
 Expected Result:
@@ -218,4 +332,40 @@ NAT Gateway Created
 Private Route Table Created
 Private Subnet Associations Created
 Route: 0.0.0.0/0 -> NAT Gateway
+``--------
+## Step 8: Install Docker
+
+### Install Docker
+
+```bash
+sudo apt update
+sudo apt install -y docker.io
 ```
+
+### Enable Docker
+
+```bash
+sudo systemctl enable docker
+sudo systemctl start docker
+```
+
+### Verify Installation
+
+```bash
+docker --version
+```
+
+### Test Docker
+
+```bash
+docker run hello-world
+```
+
+Expected Result:
+
+```text
+Hello from Docker!
+```-------
+
+
+
