@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: product-service
+  template:
+    metadata:
+      labels:
+        app: product-service
+    spec:
+      containers:
+        - name: product-service
+          image: 961544628649.dkr.ecr.ap-south-1.amazonaws.com/product-service:v1
+          ports:
+            - containerPort: 3004
+          env:
+            - name: DB_HOST
+              value: "172.17.0.1"
