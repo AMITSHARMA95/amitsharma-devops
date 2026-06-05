@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cart-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cart-service
+  template:
+    metadata:
+      labels:
+        app: cart-service
+    spec:
+      containers:
+        - name: cart-service
+          image: 961544628649.dkr.ecr.ap-south-1.amazonaws.com/cart-service:v1
+          ports:
+            - containerPort: 3002
+          env:
+            - name: REDIS_HOST
+              value: "redis-service"
